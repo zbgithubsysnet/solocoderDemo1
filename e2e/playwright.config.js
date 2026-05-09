@@ -6,10 +6,10 @@ export default defineConfig({
   expect: {
     timeout: 10000
   },
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   reporter: [
     ['list'],
     ['html', { open: 'never' }]
@@ -27,16 +27,18 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'cd .. && npm run start:server',
+      command: 'npm run start:server',
       url: 'http://localhost:3001/health',
       reuseExistingServer: !process.env.CI,
-      timeout: 30000
+      timeout: 60000,
+      cwd: '..'
     },
     {
-      command: 'cd .. && npm run start:client',
+      command: 'npm run start:client',
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
-      timeout: 30000
+      timeout: 60000,
+      cwd: '..'
     }
   ]
 });
